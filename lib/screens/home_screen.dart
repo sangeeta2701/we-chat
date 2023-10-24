@@ -24,7 +24,9 @@ class _HomeScreenState extends State<HomeScreen> {
       //floating button to add new user
       floatingActionButton: Padding(
         padding: const EdgeInsets.only(bottom: 10),
-        child: FloatingActionButton(onPressed: (){},child: Icon(Icons.add_comment_rounded),),
+        child: FloatingActionButton(
+          backgroundColor: bColor,
+          onPressed: (){},child: Icon(Icons.add_comment_rounded),),
       ),
     );
   }

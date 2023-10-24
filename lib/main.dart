@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:we_chat_app/screens/home_screen.dart';
+import 'package:we_chat_app/screens/auth/login_scteen.dart';
 import 'package:we_chat_app/utils/colors.dart';
 
+late Size mq;
 void main() {
   runApp(const MyApp());
 }
@@ -16,16 +17,16 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: "We Chat",
       theme: ThemeData(
-        appBarTheme: AppBarTheme(
-          backgroundColor: wColor,
-          centerTitle: true,
-        elevation: 1,
-        iconTheme: IconThemeData(color: bColor),
-        titleTextStyle: TextStyle(color: bColor,fontSize: 18,fontWeight: FontWeight.normal),
-        )
-      ),
-      home: HomeScreen(),
+          primaryColor: bColor,
+          appBarTheme: AppBarTheme(
+            backgroundColor: wColor,
+            centerTitle: true,
+            elevation: 1,
+            iconTheme: IconThemeData(color: bColor),
+            titleTextStyle: TextStyle(
+                color: bColor, fontSize: 18, fontWeight: FontWeight.normal),
+          )),
+      home: LoginScreen(),
     );
   }
 }
-
