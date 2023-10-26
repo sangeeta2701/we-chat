@@ -1,0 +1,50 @@
+import 'package:flutter/material.dart';
+import 'package:we_chat_app/screens/home_screen.dart';
+import 'package:we_chat_app/utils/colors.dart';
+
+import '../../main.dart';
+
+class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
+
+  @override
+  State<SplashScreen> createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+  @override
+  void initState() {
+    Future.delayed(Duration(milliseconds: 1500), () {
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (_)=>HomeScreen(),),);
+    });
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    //initializing media query
+    mq = MediaQuery.of(context).size;
+    return Scaffold(
+      
+      body: Stack(
+        children: [
+          Positioned(
+              // duration: Duration(seconds: 1),
+              top: mq.height * .15,
+              right: mq.width * 0.25,
+              width: mq.width * 0.5,
+              child: Image.asset("assets/icons/icon.png")),
+          Positioned(
+              bottom: mq.height * .15,
+              width: mq.width,
+              child: Text(
+                "MADE IN INDIA WITH ❤️",
+                style:
+                    TextStyle(fontSize: 16, color: bColor, letterSpacing: .5),
+                textAlign: TextAlign.center,
+              ))
+        ],
+      ),
+    );
+  }
+}

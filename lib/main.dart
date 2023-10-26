@@ -1,6 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:we_chat_app/screens/auth/login_scteen.dart';
+import 'package:we_chat_app/screens/splash_screen.dart';
 import 'package:we_chat_app/utils/colors.dart';
 
 late Size mq;
@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
             titleTextStyle: TextStyle(
                 color: bColor, fontSize: 18, fontWeight: FontWeight.normal),
           )),
-      home: LoginScreen(),
+      home: SplashScreen(),
     );
   }
 }
