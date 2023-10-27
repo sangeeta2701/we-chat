@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:we_chat_app/screens/home_screen.dart';
 import 'package:we_chat_app/utils/colors.dart';
 
@@ -15,7 +16,16 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     Future.delayed(Duration(milliseconds: 1500), () {
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (_)=>HomeScreen(),),);
+      //exit full screen
+      SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+      SystemChrome.setSystemUIOverlayStyle(
+          SystemUiOverlayStyle(statusBarColor: Colors.transparent));
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (_) => HomeScreen(),
+        ),
+      );
     });
     super.initState();
   }
@@ -25,7 +35,6 @@ class _SplashScreenState extends State<SplashScreen> {
     //initializing media query
     mq = MediaQuery.of(context).size;
     return Scaffold(
-      
       body: Stack(
         children: [
           Positioned(

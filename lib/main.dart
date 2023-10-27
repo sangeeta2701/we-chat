@@ -1,13 +1,23 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:we_chat_app/screens/splash_screen.dart';
 import 'package:we_chat_app/utils/colors.dart';
 
 late Size mq;
-void main() async {
+void main()  {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  //enter full screeen
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+//setting orientation to potrait only
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]).then((value) {
+   _initializeFirebase();
   runApp(const MyApp());
+  });
+  
 }
 
 class MyApp extends StatelessWidget {
@@ -32,4 +42,7 @@ class MyApp extends StatelessWidget {
       home: SplashScreen(),
     );
   }
+}
+_initializeFirebase()async{
+   await Firebase.initializeApp();
 }
