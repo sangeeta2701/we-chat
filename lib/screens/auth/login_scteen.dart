@@ -1,8 +1,12 @@
+import 'dart:math';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:we_chat_app/screens/home_screen.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:we_chat_app/utils/colors.dart';
 
 import '../../main.dart';
+import '../home_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -21,6 +25,25 @@ class _LoginScreenState extends State<LoginScreen> {
       });
     });
     super.initState();
+  }
+
+  _handleGoogleBtnClick() {
+    _signInWithGoogle().then((user) {
+      // log("User: ${user.user}");
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (_) => HomeScreen()));
+    });
+  }
+
+  Future<UserCredential> _signInWithGoogle() async {
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+    final GoogleSignInAuthentication? googleAuth =
+        await googleUser?.authentication;
+//create new credential
+    final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth?.accessToken, idToken: googleAuth?.idToken);
+//once signin retun user credential
+    return await FirebaseAuth.instance.signInWithCredential(credential);
   }
 
   @override
@@ -55,7 +78,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     elevation: 1,
                   ),
                   onPressed: () {
-                    Navigator.pushReplacement(context,MaterialPageRoute(builder: (_)=>HomeScreen()) );
+                    _handleGoogleBtnClick();
                   },
                   icon: Image.asset(
                     "assets/images/img1.png",
