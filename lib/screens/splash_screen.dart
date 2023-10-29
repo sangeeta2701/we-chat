@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:we_chat_app/screens/auth/login_scteen.dart';
@@ -6,6 +5,7 @@ import 'package:we_chat_app/screens/home_screen.dart';
 import 'package:we_chat_app/utils/colors.dart';
 
 import '../../main.dart';
+import '../api/apis.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -22,8 +22,8 @@ class _SplashScreenState extends State<SplashScreen> {
       SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
       SystemChrome.setSystemUIOverlayStyle(
           SystemUiOverlayStyle(statusBarColor: Colors.transparent));
-          print("User: ${FirebaseAuth.instance.currentUser}");
-          if(FirebaseAuth.instance.currentUser != null){
+          print("User: ${APIs.auth.currentUser}");
+          if(APIs.auth.currentUser != null){
             Navigator.pushReplacement(
         context,
         MaterialPageRoute(
@@ -55,7 +55,7 @@ class _SplashScreenState extends State<SplashScreen> {
               top: mq.height * .15,
               right: mq.width * 0.25,
               width: mq.width * 0.5,
-              child: Image.asset("assets/icons/icon.png")),
+              child: Image.asset("assets/icons/icon2.png")),
           Positioned(
               bottom: mq.height * .15,
               width: mq.width,

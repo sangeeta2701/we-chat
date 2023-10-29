@@ -1,9 +1,9 @@
 import 'dart:io';
-import 'dart:math';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:we_chat_app/api/apis.dart';
 import 'package:we_chat_app/utils/colors.dart';
 
 import '../../helper/dialogs.dart';
@@ -53,7 +53,7 @@ class _LoginScreenState extends State<LoginScreen> {
       final credential = GoogleAuthProvider.credential(
           accessToken: googleAuth?.accessToken, idToken: googleAuth?.idToken);
 //once signin retun user credential
-      return await FirebaseAuth.instance.signInWithCredential(credential);
+      return await APIs.auth.signInWithCredential(credential);
     } catch (e) {
       debugPrint("_signInWithGoogle: $e");
       Dialogs.showSnackbar(context, "Something went wrong,check internet");
@@ -80,7 +80,7 @@ class _LoginScreenState extends State<LoginScreen> {
               //if true then show animation otherwise remove logo
               right: _isAnimate ? mq.width * 0.25 : -mq.width * 0.5,
               width: mq.width * 0.5,
-              child: Image.asset("assets/icons/icon.png")),
+              child: Image.asset("assets/icons/icon2.png")),
           Positioned(
               bottom: mq.height * .15,
               left: mq.width * 0.05,
@@ -88,7 +88,7 @@ class _LoginScreenState extends State<LoginScreen> {
               height: mq.height * .05,
               child: ElevatedButton.icon(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: bColor.withOpacity(0.8),
+                    backgroundColor: themeColor,
                     shape: StadiumBorder(),
                     elevation: 1,
                   ),
