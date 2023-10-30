@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -30,12 +33,24 @@ class _HomeScreenState extends State<HomeScreen> {
           IconButton(onPressed: () {}, icon: Icon(Icons.more_vert))
         ],
       ),
-      body: ListView.builder(
-        padding: EdgeInsets.only(top: mq.height*.02),
-        physics: BouncingScrollPhysics(),
-          itemCount: 3,
-          itemBuilder: (context, index) {
-            return ChatUserCard();
+      body: StreamBuilder(
+          stream: APIs.firestore.collection("users").snapshots(),
+          builder: (context, snapshot) {
+            final list = [];
+            if (snapshot.hasData) {
+              final data = snapshot.data!.docs;
+              for (var i in data) {
+                print("Data: ${jsonEncode(i.data())}");
+                list.add(i.data()["name"]);
+              }
+            }
+            return ListView.builder(
+                padding: EdgeInsets.only(top: mq.height * .02),
+                physics: BouncingScrollPhysics(),
+                itemCount: 3,
+                itemBuilder: (context, index) {
+                  return ChatUserCard();
+                });
           }),
       //floating button to add new user
       floatingActionButton: Padding(
