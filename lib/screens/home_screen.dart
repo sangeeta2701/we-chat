@@ -1,11 +1,9 @@
-import 'dart:convert';
-import 'dart:math';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:we_chat_app/api/apis.dart';
 import 'package:we_chat_app/main.dart';
+import 'package:we_chat_app/models/chatUser.dart';
 import 'package:we_chat_app/utils/colors.dart';
 import 'package:we_chat_app/widgets/chat_user_cart.dart';
 
@@ -17,6 +15,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  List<ChatUser> list = [];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,21 +35,38 @@ class _HomeScreenState extends State<HomeScreen> {
       body: StreamBuilder(
           stream: APIs.firestore.collection("users").snapshots(),
           builder: (context, snapshot) {
-            final list = [];
-            if (snapshot.hasData) {
-              final data = snapshot.data!.docs;
-              for (var i in data) {
-                print("Data: ${jsonEncode(i.data())}");
-                list.add(i.data()["name"]);
-              }
+            switch (snapshot.connectionState) {
+              //if data is loading
+              case ConnectionState.waiting:
+              case ConnectionState.none:
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+
+              //if data is loaded
+              case ConnectionState.active:
+              case ConnectionState.done:
+                final data = snapshot.data!.docs;
+                list = data.map((e) => ChatUser.fromJson(e.data())).toList();
+
+                if (list.isNotEmpty) {
+                  return ListView.builder(
+                      padding: EdgeInsets.only(top: mq.height * .02),
+                      physics: BouncingScrollPhysics(),
+                      itemCount: list.length,
+                      itemBuilder: (context, index) {
+                        return ChatUserCard(
+                          user: list[index],
+                        );
+                      });
+                } else {
+                  return Center(
+                      child: Text(
+                    "No connection found",
+                    style: TextStyle(fontSize: 20),
+                  ));
+                }
             }
-            return ListView.builder(
-                padding: EdgeInsets.only(top: mq.height * .02),
-                physics: BouncingScrollPhysics(),
-                itemCount: 3,
-                itemBuilder: (context, index) {
-                  return ChatUserCard();
-                });
           }),
       //floating button to add new user
       floatingActionButton: Padding(

@@ -32,15 +32,15 @@ class ChatUser {
     });
 
     factory ChatUser.fromJson(Map<String, dynamic> json) => ChatUser(
-        image: json["image"],
-        about: json["about"],
-        name: json["name"],
-        createdAt: json["created_at"],
-        id: json["id"],
-        lastActive: json["last_active"],
+        image: json["image"]??"",
+        about: json["about"]??"",
+        name: json["name"]??"",
+        createdAt: json["created_at"]??"",
+        id: json["id"]??"",
+        lastActive: json["last_active"]??"",
         isOnline: json["is_online"],
-        pushToken: json["push_token"],
-        email: json["email"],
+        pushToken: json["push_token"]??"",
+        email: json["email"]??"",
     );
 
     Map<String, dynamic> toJson() => {
