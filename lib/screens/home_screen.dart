@@ -4,6 +4,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:we_chat_app/api/apis.dart';
 import 'package:we_chat_app/main.dart';
 import 'package:we_chat_app/models/chatUser.dart';
+import 'package:we_chat_app/screens/profile_screen.dart';
 import 'package:we_chat_app/utils/colors.dart';
 import 'package:we_chat_app/widgets/chat_user_cart.dart';
 
@@ -29,7 +30,11 @@ class _HomeScreenState extends State<HomeScreen> {
             onPressed: () {},
             icon: Icon(Icons.search),
           ),
-          IconButton(onPressed: () {}, icon: Icon(Icons.more_vert))
+          IconButton(
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>ProfileScreen(user: list[0],),),);
+              },
+              icon: Icon(Icons.more_vert))
         ],
       ),
       body: StreamBuilder(
