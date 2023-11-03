@@ -76,7 +76,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               label: Text("About"),
             ),
-          )
+          ),
+          height30,
+          ElevatedButton.icon(
+            style: ElevatedButton.styleFrom(
+              shape: StadiumBorder(),
+              maximumSize: Size(mq.width*.4, mq.height*.06)
+            ),
+            onPressed: (){}, icon: Icon(Icons.edit,size: 28,), label: Text("UPDATE",style: TextStyle(fontSize: 16),))
         ]),
       ),
       //floating button to add new user
