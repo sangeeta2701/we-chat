@@ -3,7 +3,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:we_chat_app/api/apis.dart';
+import 'package:we_chat_app/helper/dialogs.dart';
 import 'package:we_chat_app/models/chatUser.dart';
+import 'package:we_chat_app/screens/auth/login_scteen.dart';
 import 'package:we_chat_app/utils/colors.dart';
 import 'package:we_chat_app/widgets/sizedBox.dart';
 
@@ -30,24 +32,42 @@ class _ProfileScreenState extends State<ProfileScreen> {
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: mq.width * .05, vertical: 20),
         child: Column(children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(mq.height * .1),
-            child: CachedNetworkImage(
-              fit: BoxFit.cover,
-              width: mq.height * 0.2,
-              height: mq.height * 0.2,
-              imageUrl: widget.user.image,
-              errorWidget: (context, url, error) => CircleAvatar(
-                child: Icon(CupertinoIcons.person),
+          Stack(
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(mq.height * .1),
+                child: CachedNetworkImage(
+                  fit: BoxFit.cover,
+                  width: mq.height * 0.2,
+                  height: mq.height * 0.2,
+                  imageUrl: widget.user.image,
+                  errorWidget: (context, url, error) => CircleAvatar(
+                    child: Icon(CupertinoIcons.person),
+                  ),
+                ),
               ),
-            ),
+              Positioned(
+                bottom: 0,
+                right: 0,
+                child: MaterialButton(
+                  color: wColor,
+                  elevation: 1,
+                  shape: CircleBorder(),
+                  onPressed: () {},
+                  child: Icon(
+                    Icons.edit,
+                    color: themeColor,
+                  ),
+                ),
+              )
+            ],
           ),
-          height12,
+          height20,
           Text(
             widget.user.email,
             style: TextStyle(color: bColor.withOpacity(0.4), fontSize: 16),
           ),
-          height20,
+          height30,
           TextFormField(
             initialValue: widget.user.name,
             decoration: InputDecoration(
@@ -79,21 +99,38 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
           height30,
           ElevatedButton.icon(
-            style: ElevatedButton.styleFrom(
-              shape: StadiumBorder(),
-              maximumSize: Size(mq.width*.4, mq.height*.06)
-            ),
-            onPressed: (){}, icon: Icon(Icons.edit,size: 28,), label: Text("UPDATE",style: TextStyle(fontSize: 16),))
+              style: ElevatedButton.styleFrom(
+                  shape: StadiumBorder(),
+                  minimumSize: Size(mq.width * .4, mq.height * .06)),
+              onPressed: () {},
+              icon: Icon(
+                Icons.edit,
+                size: 20,
+              ),
+              label: Text(
+                "UPDATE",
+                style: TextStyle(fontSize: 16),
+              ))
         ]),
       ),
       //floating button to add new user
       floatingActionButton: Padding(
         padding: const EdgeInsets.only(bottom: 10),
         child: FloatingActionButton.extended(
-          backgroundColor: themeColor,
+          backgroundColor: const Color.fromRGBO(255, 82, 82, 1),
           onPressed: () async {
+            Dialogs.showProgressBar(context);
+
             await APIs.auth.signOut();
-            await GoogleSignIn().signOut();
+            await GoogleSignIn().signOut().then((value) {
+              Navigator.pop(context);
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => LoginScreen(),
+                ),
+              );
+            });
           },
           icon: Icon(Icons.logout),
           label: Text("Logout"),
