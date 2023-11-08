@@ -6,6 +6,9 @@ class APIs {
   //for authentication
   static FirebaseAuth auth = FirebaseAuth.instance;
 
+  //for storing self info
+  static late ChatUser me;
+
   //for accessing cloud firestore database
   static FirebaseFirestore firestore = FirebaseFirestore.instance;
 
@@ -14,6 +17,17 @@ class APIs {
   //for checking user exists or not
   static Future<bool> userExists() async {
     return (await firestore.collection("users").doc(user.uid).get()).exists;
+  }
+
+  //for getting current user info
+  static Future<void> getSelfInfo() async {
+    await firestore.collection("users").doc(user.uid).get().then((user) async{
+      if (user.exists) {
+        me = ChatUser.fromJson(user.data()!);
+      } else {
+        await createUser().then((value) => getSelfInfo());
+      }
+    });
   }
 
   //for creating new users
@@ -36,21 +50,12 @@ class APIs {
         .doc(user.uid)
         .set(chatUser.toJson());
   }
-  // static Future<void> createUser() async {
-  //   final time = DateTime.now().microsecondsSinceEpoch.toString();
-  //   final chatUser = ChatUser(
-  //       image: user.photoURL ?? "",
-  //       about: "Hey, I am using We Chat",
-  //       name: user.displayName ?? "",
-  //       createdAt: time,
-  //       id: user.uid,
-  //       lastActive: time,
-  //       isOnline: false,
-  //       pushToken: "",
-  //       email: user.email ?? "");
-  //   return await firestore
-  //           .collection("users")
-  //           .doc(user.uid)
-  //           .set(chatUser.toJson());
-  // }
+
+//for getting all users from firestore database
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getAllUsers() {
+    return APIs.firestore
+        .collection("users")
+        .where("id", isNotEqualTo: user.uid)
+        .snapshots();
+  }
 }
