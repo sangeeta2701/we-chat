@@ -21,7 +21,7 @@ class APIs {
 
   //for getting current user info
   static Future<void> getSelfInfo() async {
-    await firestore.collection("users").doc(user.uid).get().then((user) async{
+    await firestore.collection("users").doc(user.uid).get().then((user) async {
       if (user.exists) {
         me = ChatUser.fromJson(user.data()!);
       } else {
@@ -57,5 +57,13 @@ class APIs {
         .collection("users")
         .where("id", isNotEqualTo: user.uid)
         .snapshots();
+  }
+
+  //for updating user information
+  static Future<void> updateUserInfo() async {
+    await firestore
+        .collection("users")
+        .doc(user.uid)
+        .update({"name": me.name, "about": me.about});
   }
 }
