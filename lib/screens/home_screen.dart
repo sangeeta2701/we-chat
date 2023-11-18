@@ -17,6 +17,8 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   List<ChatUser> list = [];
+  final List<ChatUser> _searchList = [];
+  bool _isSearching = false;
 
   @override
   void initState() {
@@ -29,13 +31,44 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: Icon(CupertinoIcons.home),
-        title: Text(
-          "We Chat",
-        ),
+        title: _isSearching
+            ? Text(
+                "We Chat",
+              )
+            : TextField(
+                autofocus: true,
+                onChanged: (value) {
+                  // search logic
+                  _searchList.clear();
+                  for (var i in list) {
+                    if (i.name.toLowerCase().contains(value.toLowerCase()) ||
+                        i.email.toLowerCase().contains(value.toLowerCase())) {
+                      _searchList.add(i);
+                    }
+                    setState(() {
+                      _searchList;
+                    });
+                  }
+                },
+                style: TextStyle(
+                  fontSize: 16,
+                  letterSpacing: 0.5,
+                ),
+                decoration: InputDecoration(
+                  border: InputBorder.none,
+                  hintText: "Search Here",
+                ),
+              ),
         actions: [
           IconButton(
-            onPressed: () {},
-            icon: Icon(Icons.search),
+            onPressed: () {
+              setState(() {
+                _isSearching = !_isSearching;
+              });
+            },
+            icon: Icon(_isSearching
+                ? CupertinoIcons.clear_circled_solid
+                : Icons.search),
           ),
           IconButton(
               onPressed: () {
@@ -72,10 +105,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   return ListView.builder(
                       padding: EdgeInsets.only(top: mq.height * .02),
                       physics: BouncingScrollPhysics(),
-                      itemCount: list.length,
+                      itemCount:_isSearching? _searchList.length: list.length,
                       itemBuilder: (context, index) {
                         return ChatUserCard(
-                          user: list[index],
+                          user:_isSearching?_searchList[index] :list[index],
                         );
                       });
                 } else {
