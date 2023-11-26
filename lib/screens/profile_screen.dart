@@ -1,4 +1,3 @@
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -60,7 +59,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         color: wColor,
                         elevation: 1,
                         shape: CircleBorder(),
-                        onPressed: () {},
+                        onPressed: () {
+                          _showBottomSheet();
+                        },
                         child: Icon(
                           Icons.edit,
                           color: themeColor,
@@ -163,5 +164,51 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
       ),
     );
+  }
+
+  //bottom sheet for picking a profile picture for user
+  void _showBottomSheet() {
+    showModalBottomSheet(
+        context: context,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20),
+          topRight: Radius.circular(20),
+        )),
+        builder: (_) {
+          return ListView(
+            shrinkWrap: true,
+            padding: EdgeInsets.only(top: mq.height * .03,bottom: mq.height*.05),
+            children: [
+              Text(
+                "Pick Your Profile Picture",
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+              ),
+              height8,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  //pick from gallery
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: wColor,
+                      shape: CircleBorder(),
+                      fixedSize: Size(mq.width*.25, mq.height*.15)
+                    ),
+                    onPressed: (){}, child: Image.asset("assets/images/img2.png")),
+                    //pick from camera
+                    ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: wColor,
+                      shape: CircleBorder(),
+                      fixedSize: Size(mq.width*.25, mq.height*.15)
+                    ),
+                    onPressed: (){}, child: Image.asset("assets/images/img3.png"))
+                ],
+              ),
+            ],
+          );
+        });
   }
 }
