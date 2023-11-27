@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:we_chat_app/api/apis.dart';
 import 'package:we_chat_app/helper/dialogs.dart';
 import 'package:we_chat_app/models/chatUser.dart';
@@ -21,6 +24,7 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   final _formKey = GlobalKey<FormState>();
+  String? _image;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -40,18 +44,33 @@ class _ProfileScreenState extends State<ProfileScreen> {
               child: Column(children: [
                 Stack(
                   children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(mq.height * .1),
-                      child: CachedNetworkImage(
-                        fit: BoxFit.cover,
-                        width: mq.height * 0.2,
-                        height: mq.height * 0.2,
-                        imageUrl: widget.user.image,
-                        errorWidget: (context, url, error) => CircleAvatar(
-                          child: Icon(CupertinoIcons.person),
-                        ),
-                      ),
-                    ),
+                    _image != null
+                        ?
+                        //local image
+                        ClipRRect(
+                            borderRadius: BorderRadius.circular(mq.height * .1),
+                            child: Image.file(
+                              File(_image!),
+                              fit: BoxFit.cover,
+                              width: mq.height * 0.2,
+                              height: mq.height * 0.2,
+                            ),
+                          )
+                        :
+                        //image from server
+                        ClipRRect(
+                            borderRadius: BorderRadius.circular(mq.height * .1),
+                            child: CachedNetworkImage(
+                              fit: BoxFit.cover,
+                              width: mq.height * 0.2,
+                              height: mq.height * 0.2,
+                              imageUrl: widget.user.image,
+                              errorWidget: (context, url, error) =>
+                                  CircleAvatar(
+                                child: Icon(CupertinoIcons.person),
+                              ),
+                            ),
+                          ),
                     Positioned(
                       bottom: 0,
                       right: 0,
@@ -178,7 +197,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
         builder: (_) {
           return ListView(
             shrinkWrap: true,
-            padding: EdgeInsets.only(top: mq.height * .03,bottom: mq.height*.05),
+            padding:
+                EdgeInsets.only(top: mq.height * .03, bottom: mq.height * .05),
             children: [
               Text(
                 "Pick Your Profile Picture",
@@ -191,20 +211,46 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 children: [
                   //pick from gallery
                   ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: wColor,
-                      shape: CircleBorder(),
-                      fixedSize: Size(mq.width*.25, mq.height*.15)
-                    ),
-                    onPressed: (){}, child: Image.asset("assets/images/img2.png")),
-                    //pick from camera
-                    ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: wColor,
-                      shape: CircleBorder(),
-                      fixedSize: Size(mq.width*.25, mq.height*.15)
-                    ),
-                    onPressed: (){}, child: Image.asset("assets/images/img3.png"))
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: wColor,
+                          shape: CircleBorder(),
+                          fixedSize: Size(mq.width * .25, mq.height * .15)),
+                      onPressed: () async {
+                        final ImagePicker picker = ImagePicker();
+                        //pick an image from gallery
+                        final XFile? image =
+                            await picker.pickImage(source: ImageSource.gallery);
+                        if (image != null) {
+                          print("image path: ${image.path}");
+                          setState(() {
+                            _image = image.path;
+                          });
+                        }
+                        //for hiding bottom sheet
+                        Navigator.pop(context);
+                      },
+                      child: Image.asset("assets/images/img2.png")),
+                  //pick from camera
+                  ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: wColor,
+                          shape: CircleBorder(),
+                          fixedSize: Size(mq.width * .25, mq.height * .15)),
+                      onPressed: ()async {
+                         final ImagePicker picker = ImagePicker();
+                        //pick an image from gallery
+                        final XFile? image =
+                            await picker.pickImage(source: ImageSource.camera);
+                        if (image != null) {
+                          print("image path: ${image.path}");
+                          setState(() {
+                            _image = image.path;
+                          });
+                        }
+                        //for hiding bottom sheet
+                        Navigator.pop(context);
+                      },
+                      child: Image.asset("assets/images/img3.png"))
                 ],
               ),
             ],
