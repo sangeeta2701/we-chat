@@ -226,6 +226,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             _image = image.path;
                           });
                         }
+                        APIs.updateProfilePicture(File(_image!));
                         //for hiding bottom sheet
                         Navigator.pop(context);
                       },
@@ -236,9 +237,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           backgroundColor: wColor,
                           shape: CircleBorder(),
                           fixedSize: Size(mq.width * .25, mq.height * .15)),
-                      onPressed: ()async {
-                         final ImagePicker picker = ImagePicker();
-                        //pick an image from gallery
+                      onPressed: () async {
+                        final ImagePicker picker = ImagePicker();
+                        //pick an image from camera
                         final XFile? image =
                             await picker.pickImage(source: ImageSource.camera);
                         if (image != null) {
@@ -247,6 +248,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             _image = image.path;
                           });
                         }
+                        APIs.updateProfilePicture(File(_image!));
                         //for hiding bottom sheet
                         Navigator.pop(context);
                       },
