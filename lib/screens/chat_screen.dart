@@ -24,6 +24,11 @@ class _ChatScreenState extends State<ChatScreen> {
           automaticallyImplyLeading: false,
           flexibleSpace: _appBar(),
         ),
+        body: Column(
+          children: [
+            _chatInput(),
+          ],
+        ),
       ),
     );
   }
@@ -78,6 +83,71 @@ class _ChatScreenState extends State<ChatScreen> {
               ),
             ],
           )
+        ],
+      ),
+    );
+  }
+
+  Widget _chatInput() {
+    return Padding(
+      padding:  EdgeInsets.symmetric(vertical: mq.height*.01,horizontal: mq.width*.025),
+      child: Row(
+        children: [
+          Expanded(
+            child: Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15)
+              ),
+              child: Row(
+                children: [
+                  //emoji button
+                  IconButton(
+                        onPressed: () {
+                        },
+                        icon: Icon(
+                          Icons.emoji_emotions,
+                          color: themeColor,
+                          size: 25,
+                        )),
+                        Expanded(child: TextField(
+                          keyboardType: TextInputType.multiline,
+                          maxLines: null,
+                          decoration: InputDecoration(
+                            hintText: "Type something...",
+                            hintStyle: TextStyle(color: themeColor),
+                            border: InputBorder.none
+                          ),
+                        )),
+                  //gallery button
+                  IconButton(
+                        onPressed: () {
+                        },
+                        icon: Icon(
+                          Icons.image,
+                          color: themeColor,
+                          size: 25,
+                        )),
+                  //camera button
+                  IconButton(
+                        onPressed: () {
+                        },
+                        icon: Icon(
+                          Icons.camera_alt_rounded,
+                          color: themeColor,
+                          size: 25,
+                        )),
+                        width4,
+                ],
+              ),
+            ),
+          ),
+          //Send message button
+          MaterialButton(onPressed: (){},
+          shape: CircleBorder(),
+          color: Colors.green,
+          minWidth: 0,
+          padding: EdgeInsets.only(top: 10,bottom: 10,right: 5,left: 10),
+          child: Icon(Icons.send,color: wColor,size: 28,),)
         ],
       ),
     );
