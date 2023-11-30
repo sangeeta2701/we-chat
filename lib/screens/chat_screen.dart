@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -5,6 +7,7 @@ import 'package:we_chat_app/models/chatUser.dart';
 import 'package:we_chat_app/utils/colors.dart';
 import 'package:we_chat_app/widgets/sizedBox.dart';
 
+import '../api/apis.dart';
 import '../main.dart';
 
 class ChatScreen extends StatefulWidget {
@@ -28,41 +31,42 @@ class _ChatScreenState extends State<ChatScreen> {
           children: [
             Expanded(
               child: StreamBuilder(
-                  // stream: APIs.getAllUsers(),
+                  stream: APIs.getAllMessages(),
                   builder: (context, snapshot) {
-                switch (snapshot.connectionState) {
-                  //if data is loading
-                  case ConnectionState.waiting:
-                  case ConnectionState.none:
-                  // return Center(
-                  //   child: CircularProgressIndicator(),
-                  // );
+                    switch (snapshot.connectionState) {
+                      //if data is loading
+                      case ConnectionState.waiting:
+                      case ConnectionState.none:
+                        return Center(
+                          child: CircularProgressIndicator(),
+                        );
 
-                  //if data is loaded
-                  case ConnectionState.active:
-                  case ConnectionState.done:
-                    // final data = snapshot.data!.docs;
-                    // list =
-                    //     data.map((e) => ChatUser.fromJson(e.data())).toList();
-                    final _list = [];
+                      //if data is loaded
+                      case ConnectionState.active:
+                      case ConnectionState.done:
+                        final data = snapshot.data!.docs;
+                        print("Data: ${jsonEncode(data[0].data())}");
+                        // list =
+                        //     data.map((e) => ChatUser.fromJson(e.data())).toList();
+                        final _list = [];
 
-                    if (_list.isNotEmpty) {
-                      return ListView.builder(
-                          padding: EdgeInsets.only(top: mq.height * .02),
-                          physics: BouncingScrollPhysics(),
-                          itemCount: _list.length,
-                          itemBuilder: (context, index) {
-                            return Text("Message: ${_list[index]}");
-                          });
-                    } else {
-                      return Center(
-                          child: Text(
-                        "Say Hii 👋",
-                        style: TextStyle(fontSize: 20),
-                      ));
+                        if (_list.isNotEmpty) {
+                          return ListView.builder(
+                              padding: EdgeInsets.only(top: mq.height * .02),
+                              physics: BouncingScrollPhysics(),
+                              itemCount: _list.length,
+                              itemBuilder: (context, index) {
+                                return Text("Message: ${_list[index]}");
+                              });
+                        } else {
+                          return Center(
+                              child: Text(
+                            "Say Hii 👋",
+                            style: TextStyle(fontSize: 20),
+                          ));
+                        }
                     }
-                }
-              }),
+                  }),
             ),
             _chatInput(),
           ],

@@ -90,4 +90,16 @@ class APIs {
       "image": me.image,
     });
   }
+
+
+
+////////////////////////////////Chat Screen api///////////////////////////////////////////
+
+//for getting all messages of a specific conversation from firestore database
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getAllMessages() {
+    return APIs.firestore
+        .collection("messages")
+        .snapshots();
+  }
+
 }
